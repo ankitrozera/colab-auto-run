@@ -4,7 +4,7 @@ from selenium.webdriver.common.keys import Keys
 import time
 
 # 🔑 Replace with your Colab notebook ID
-COLAB_URL = "https://colab.research.google.com/drive/17y18dEcsjIfCUgrXS7zvb3tcApfaAYSn#scrollTo=39FyC3mRyf36"
+COLAB_URL = "https://colab.research.google.com"
 # Chrome options
 options = webdriver.ChromeOptions()
 options.add_argument("--no-sandbox")
