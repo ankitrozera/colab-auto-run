@@ -24,10 +24,18 @@ jobs:
           sudo apt-get install -y wget unzip xvfb
           wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
           sudo apt-get install -y ./google-chrome-stable_current_amd64.deb
-          CHROME_VERSION=$(google-chrome --version | grep -oP '[0-9]+')
-          echo "Installed Chrome: $CHROME_VERSION"
-          wget -N https://chromedriver.storage.googleapis.com/$(curl -sS https://chromedriver.storage.googleapis.com/LATEST_RELEASE)/chromedriver_linux64.zip
-          unzip chromedriver_linux64.zip -d /usr/local/bin/
+          
+          # Get installed Chrome major version
+          CHROME_VERSION=$(google-chrome --version | grep -oP '[0-9]+' | head -1)
+          echo "Installed Chrome major version: $CHROME_VERSION"
+          
+          # Get matching ChromeDriver version
+          DRIVER_VERSION=$(curl -s "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_VERSION")
+          echo "Matching ChromeDriver version: $DRIVER_VERSION"
+          
+          # Download and install Chromedriver
+          wget -N https://chromedriver.storage.googleapis.com/$DRIVER_VERSION/chromedriver_linux64.zip
+          unzip -o chromedriver_linux64.zip -d /usr/local/bin/
           chmod +x /usr/local/bin/chromedriver
 
       - name: Install dependencies
