@@ -1,48 +1,28 @@
-name: Trigger Colab Notebook
+name: Auto Trigger Colab
 
 on:
   schedule:
-    - cron: "5 */12 * * *"
-  workflow_dispatch:
+    - cron: "5 */12 * * *"  # Har 12 ghante + 5 minutes
+  workflow_dispatch:        # Manual run bhi allow
 
 jobs:
-  run-colab:
+  run:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - name: Checkout repo
+        uses: actions/checkout@v3
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v4
         with:
-          python-version: '3.10'
+          python-version: "3.10"
 
-      - name: Install Chrome
+      - name: Install dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y google-chrome-stable
+          python -m pip install --upgrade pip
+          pip install selenium
 
-      - name: Install ChromeDriver
-        run: |
-          sudo apt-get install -y chromium-chromedriver
-
-      - name: Install dependencies
-        run: pip install selenium
-
-      - name: Run controller.py with Xvfb (virtual display)
-        run: |
-          xvfb-run -a python controller.py
-
-      - name: Upload Screenshot (before run)
-        uses: actions/upload-artifact@v4
-        with:
-          name: colab-screenshot
-          path: colab_screen.png
-
-      - name: Upload Screenshot (after run)
-        uses: actions/upload-artifact@v4
-        with:
-          name: colab-screenshot-after
-          path: colab_screen_after.png
-
+      - name: Run Controller
+        run: python controller.py
