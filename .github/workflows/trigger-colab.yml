@@ -2,32 +2,37 @@ name: Trigger Colab Notebook
 
 on:
   schedule:
-    - cron: "5 */12 * * *"   # every 12 hours + 5 min
-  workflow_dispatch:
+    - cron: "5 */12 * * *"   # 🔄 Every 12 hours + 5 mins
+  workflow_dispatch:          # 🔄 Manual trigger option
 
 jobs:
   run-colab:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
-          python-version: "3.10"
+          python-version: '3.10'
 
       - name: Install dependencies
         run: |
-          pip install selenium webdriver-manager
+          pip install selenium
 
-      - name: Run Colab Trigger
+      - name: Run controller.py
         run: python controller.py
 
-      - name: Upload Screenshot (if any)
-        uses: actions/upload-artifact@v3
+      - name: Upload Screenshot (before run)
+        uses: actions/upload-artifact@v4
         with:
           name: colab-screenshot
           path: colab_screen.png
 
+      - name: Upload Screenshot (after run)
+        uses: actions/upload-artifact@v4
+        with:
+          name: colab-screenshot-after
+          path: colab_screen_after.png
