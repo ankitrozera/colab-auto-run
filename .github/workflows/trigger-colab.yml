@@ -18,25 +18,14 @@ jobs:
         with:
           python-version: '3.10'
 
-      - name: Install Chrome & Chromedriver
+      - name: Install Chrome
         run: |
           sudo apt-get update
-          sudo apt-get install -y wget unzip xvfb
-          wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-          sudo apt-get install -y ./google-chrome-stable_current_amd64.deb
-          
-          # Get installed Chrome major version
-          CHROME_VERSION=$(google-chrome --version | grep -oP '[0-9]+' | head -1)
-          echo "Installed Chrome major version: $CHROME_VERSION"
-          
-          # Get matching ChromeDriver version
-          DRIVER_VERSION=$(curl -s "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_VERSION")
-          echo "Matching ChromeDriver version: $DRIVER_VERSION"
-          
-          # Download and install Chromedriver
-          wget -N https://chromedriver.storage.googleapis.com/$DRIVER_VERSION/chromedriver_linux64.zip
-          unzip -o chromedriver_linux64.zip -d /usr/local/bin/
-          chmod +x /usr/local/bin/chromedriver
+          sudo apt-get install -y google-chrome-stable
+
+      - name: Install ChromeDriver
+        run: |
+          sudo apt-get install -y chromium-chromedriver
 
       - name: Install dependencies
         run: pip install selenium
