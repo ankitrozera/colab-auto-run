@@ -1,0 +1,23 @@
+name: Auto Trigger Colab
+
+on:
+  schedule:
+    - cron: "5 */12 * * *"   # every 12 hours + 5 min
+  workflow_dispatch:          # manual trigger option
+
+jobs:
+  run-colab:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Install Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y chromium-browser chromium-chromedriver
+          pip install selenium
+
+      - name: Trigger Colab Notebook
+        run: python controller.py
